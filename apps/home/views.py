@@ -122,6 +122,14 @@ def getLogs(request):
     query_set=logs_generated.objects.filter(author=request.user)
     return JsonResponse({"logs":list(query_set.values())})
 
+@login_required(login_url="/login/")
+def notifwebsites(request):
+    context={}
+    objects=website.objects.filter(author=request.user)
+    context = {"blocked_websites":objects}
+    html_template = loader.get_template('home/notifications.html')
+    return render(context, request, "home/notifications.html")
+
 
 
 
