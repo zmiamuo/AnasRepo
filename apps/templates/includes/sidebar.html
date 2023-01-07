@@ -1,0 +1,68 @@
+{% load static %}
+<style>
+    .nav{
+        margin-bottom:120px;
+    }
+</style>
+
+    <div class="sidebar">
+        <!--
+          Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red"
+      -->
+        <div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="javascript:void(0)" class="simple-text logo-mini">
+                    <img src=" {{ ASSETS_ROOT }}/img/logo.png">
+                </a>
+                <a href="javascript:void(0)" class="simple-text logo-normal">
+                    Ensa proxy
+                </a>
+            </div>
+            <ul class="nav">
+                <div class="nav first">
+                <li class="{% if 'index' in segment %} active {% endif %} ">
+                    <a href="/">
+                        <i class="tim-icons icon-chart-pie-36"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                
+                <li class="{% if 'tables' in segment %} active {% endif %}">
+                    <a href="/tables.html">
+                        <i class="tim-icons icon-puzzle-10"></i>
+                        <p>proxy_logs</p>
+                    </a>
+                </li>
+                <li class="{% if 'user' in segment %} active {% endif %}">
+                    <a href="/user.html">
+                        <i class="tim-icons icon-single-02"></i>
+                        <p>User Profile</p>
+                    </a>
+                </li>
+                </div>
+            <div class="nav first">
+                <li class="{% if 'notifications' in segment %} active {% endif %}">
+                    <a href="/notifications.html">
+                        <i class="tim-icons icon-bell-55"></i>
+                        <p>Notifications</p>
+                    </a>
+                </li>
+                
+                
+            
+                    
+                <li>
+                    <a href="{% url 'login' %}">
+                        <i class="tim-icons icon-button-power"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+            </div>
+            <li>
+                <p style="text-align:center">your ip address is</p>
+                <p style="text-align:center">128.1.1.1:8000</p>
+            </li>
+
+            </ul>
+        </div>
+    </div>

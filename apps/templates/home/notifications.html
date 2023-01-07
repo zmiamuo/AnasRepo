@@ -1,0 +1,77 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Notifications {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="content">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Blocked Websites notifications</h4>
+          </div>
+          <div class="card-body">
+            {% if user.is_authenticated %}
+              {% for w in blocked_websites %}
+            <div class="alert alert-info">
+              <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+              </button>
+              <span>{{w.website_url}} is now blocked !</span>
+            </div>
+            {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Notification states</h4>
+          </div>
+          <div class="card-body">
+            <div class="alert alert-primary">
+              <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+              </button>
+              <span><b> Primary - </b> This is a regular notification made with ".alert-primary"</span>
+            </div>
+            <div class="alert alert-info">
+              <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+              </button>
+              <span><b> Info - </b> This is a regular notification made with ".alert-info"</span>
+            </div>
+            <div class="alert alert-success">
+              <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+              </button>
+              <span><b> Success - </b> This is a regular notification made with ".alert-success"</span>
+            </div>
+            <div class="alert alert-warning">
+              <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+              </button>
+              <span><b> Warning - </b> This is a regular notification made with ".alert-warning"</span>
+            </div>
+            <div class="alert alert-danger">
+              <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+              </button>
+              <span><b> Danger - </b> This is a regular notification made with ".alert-danger"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,358 @@
+{% extends "layouts/base.html" %}
+{% load replace %}
+{% load log_generator %}
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<style>
+    select {
+        /* Reset Select */
+        appearance: none;
+        outline: 0;
+        border: 0;
+        box-shadow: none;
+        /* Personalize */
+        flex: 1;
+        padding: 0 1em;
+        color: #fff;
+        background-color: #171531;
+        background-image: none;
+        cursor: pointer;
+      }
+      /* Remove IE arrow */
+      select::-ms-expand {
+        display: none;
+      }
+      /* Custom Select wrapper */
+      .select {
+        position: relative;
+        display: flex;
+        width: 20em;
+        height: 3em;
+        border-radius: .25em;
+        overflow: hidden;
+      }
+      /* Arrow */
+
+      .select::after {
+        content: '\25BC';
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 1em;
+        background-color: #34495e;
+        transition: .25s all ease;
+        pointer-events: none;
+      }
+      /* Transition */
+      .select:hover::after {
+        color: #e14eca;
+      }
+    .first{
+     display:grid; /* le fameux */
+    grid-template-columns:50% 50%; /* 3 colonnes de largeur différente */
+    
+    gap:12px; /* gouttière (mettre les deux lignes)*/
+    padding:0; 
+   
+    
+   
+    }
+    /* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+   
+    .col-12 {
+       
+        height: 120px;
+    }
+    .col-lg-6 {
+      flex: 0 0 50%;
+      max-width: 100% !important;
+      
+
+    }
+    .table-responsive{
+        height:250px;
+        overflow: scroll;
+    }
+    td{
+        font-size:10px;
+        text-align:center;
+        padding:15px;
+
+    }
+    .time,.username,.left_th{
+        text-align:left;   
+    }
+    .text-right{
+        text-align:right;
+    }
+    th{
+        text-align:center;
+    }
+    .le{
+        
+    }
+    .blocked-site{
+       display:flex;
+       flex-wrap:wrap;
+       margin-bottom:30px;
+       justify-content:space-between;
+       
+
+    }
+    .text-blocked{
+        height:70%;
+        overflow:auto;
+        border:solid ;
+        border-width:0.1 px;
+        border-radius:10px;
+        padding:10px;
+        padding-right:30px;
+    }
+    .chart-area{
+       padding:20px;
+       padding-top:5px;
+    }
+    .new {
+        height:55%;
+    }
+    [type=number],[type=text]{
+    border-radius:7px;
+    background-color:#171531;
+    padding:1px;
+    color:white;
+       
+       
+    }
+    .text {
+       width:130px;
+       border-radius:7px;
+       background-color:#171531;
+       padding:10px;
+    }
+    .proxy{
+        height:85%;
+    }
+    .text-blocked p:hover{
+        opacity:70%;
+    }
+ 
+     
+</style>
+
+<div class="content">
+    <div class="row first">
+        <div class="col-12">
+            <div class="card card-chart">
+                <div class="card-header ">
+                    <div class="row">
+                        <div class="col-sm-6 text-left">
+                            <h5 class="card-category">YOUR DATA IS SAFE</h5>
+                            <h2 class="card-title">DATA USAGE</h2>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="chartBig1"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <div class="card ">
+                <div class="card-header">
+                    <h4 class="card-title"> LOGS GENERATED</h4>
+
+                </div>
+                <div class="card-body">
+                    
+                    <div class="table-responsive">
+                        <table class="table tablesorter " id="">
+                            <thead>
+                                <tr>
+                                  <th scope="col">time</th>
+                                  <th scope="col">ip_source</th>
+                                  <th scope="col">ip_destination</th>
+                                  <th scope="col">Protocole </th>
+                                </tr>
+                              </thead>
+                            
+                            <tbody id="display">
+                                {{ log_generator }}
+                           
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card card-chart">
+                <div class="card-header">
+                    
+                    <h3 class="card-title"> Blocked websites</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <form method="POST" action="{% url 'home' %}" >
+                        {% csrf_token %}
+                            <div class="blocked-site">
+                                <input type="text" name="blocked" placeholder="website URL">
+                                <input type="submit" value="add" name="add_websites" class="btn btn-fill btn-primary">
+                            </div>
+                        </form>
+                        <div class="text-blocked">
+                            {% if blocked_websites %}
+                                {% for w in blocked_websites %}
+                                    <p href="{{ w.website_url}}"></p>
+                                {% endfor %}
+                            {% else %}
+                                <p>No websites to display</p>
+                            {% endif %} 
+
+                            
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card card-chart">
+                <div class="card-header">
+                    <h3 class="card-title">Generate proxys</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                    <form method="POST">
+                            {% csrf_token %}
+                            {{form2.as_p}}
+                        <div class="blocked-site">
+                            <input class="text" type="number" name="Duration" placeholder="Duration" required="required">
+                            <input class="text" type="number" name="Usage" placeholder="Usage" required="required">
+                        </div>
+                        <h5 class="card-category"> Authorized ip adddress</h5>
+                        <div class="select">
+                            <select name="ip_address">
+                                {% for  x in available_ips %}
+                                <option value={{x.Availaible_ip}}>{{x.Availaible_ip}}</option>
+                                {% endfor %}
+                             
+                            </select>
+                          </div>
+                          <br>
+
+                          <input style="width:100%; text-align:center"  type="submit" value="Generate" name="generate" class="btn btn-fill btn-primary generate">
+                    </form>
+
+
+                        
+
+                         
+                       
+
+                        
+                   
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card card-chart">
+                <div class="card-header">
+                    <h3 class="card-title">proxys</h3>
+                    
+                </div>
+                
+                <div class="card-body">
+                    <div class="chart-area">
+                        <h5 class="card-category"> proxys generated</h5>
+                        <br>
+                       
+                        <div class="text-blocked proxy">
+                            
+                            {% for x in generated_proxy  %}
+                            <p> {{x.ip_address}} </p>
+                         
+                            {% endfor %}
+
+                        
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+    $(document).ready(function () {
+        // Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+    });
+
+
+    $(document).ready(function(){
+
+        setInterval(function(){
+            $.ajax({
+                type:'GET',
+                url:"{% url 'getLogs' %}",
+                success:function(response){
+                    $("#display").empty();
+                    for (var key in response.logs)
+                    {
+                        console.log(response.logs[key].author);
+                        var temp="<tr><th scope='row'>"+response.logs[key].date+"</th><td>"+response.logs[key].ip_address_src+"</td><td>"+response.logs[key].ip_address_dst+"</td><td>"+response.logs[key].action+"</td></tr>";
+                        $("#display").append(temp);
+                    }
+
+
+                },
+                error:function(response){
+                    alert("NO DATA FOUND");
+                }
+            
+            });
+                
+            },1000);
+        
+    });
+
+</script>
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+{% endblock javascripts %}

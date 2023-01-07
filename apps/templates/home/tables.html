@@ -1,0 +1,121 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<style>
+.table-responsive{
+  height:100%;
+  overflow: scroll;
+}
+
+.time,.username {
+  text-align:left;   
+}
+.username {
+  padding-left:80px !important;
+}
+.text-right{
+  text-align:left;
+}
+th{
+  text-align:center;
+}
+.le{
+
+}
+.ip-add,.username{
+  text-align:left !important;
+
+}
+td{
+  text-align:center;
+}
+.time {
+  margin-let:20px !important;
+}
+.left_th{
+  text-align:left;
+  margin-left:30px;
+}
+.left_ap{
+  text-align:center;
+  padding-right: 100px !important;
+}
+</style>
+  <div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card ">
+          <div class="card-header">
+            <h4 class="card-title"> Simple Table</h4>
+          </div>
+          <div class="card-body">
+            
+            </table>
+            <div class="table-responsive">
+                <table class="table tablesorter " id="">
+                  <thead>
+                    <tr>
+                      <th scope="col">date</th>
+                      <th scope="col">username</th>
+                      <th scope="col">ip_source</th> 
+                      <th scope="col">ip_destination</th> 
+                      <th scope="col">protocol</th>
+                      
+                    </tr>
+                  </thead>
+                
+                    
+                    <tbody id="display">
+                    
+                    
+
+                   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+
+  setInterval(function(){
+      $.ajax({
+          type:'GET',
+          url:"{% url 'getLogs' %}",
+          success:function(response){
+              $("#display").empty();
+              for (var key in response.logs)
+              {
+                  console.log(response.logs[key].author);
+                  var temp="<tr><th scope='row'>"+response.logs[key].date+"</th><td>"+response.logs[key].username+"</td><td>"+response.logs[key].ip_address+"</td><td>"+response.logs[key].action+"</td></tr>";
+                  $("#display").append(temp);
+              }
+
+
+          },
+          error:function(response){
+              alert("NO DATA FOUND");
+          }
+      
+      });
+          
+      },1000);
+  
+});
+</script>
+{% endblock javascripts %}
