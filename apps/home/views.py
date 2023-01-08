@@ -50,7 +50,7 @@ def index(request):
 
     # Iterate over each row of the CSV file and create a new model instance
             for row in reader:
-                date=row[0]
+                date=datetime.now().strftime("%H:%M:%S")
                 ip_src=row[1]
                 ip_dst=row[2]
                 action=row[3]
