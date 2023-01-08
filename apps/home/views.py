@@ -14,8 +14,8 @@ import time
 import pyshark
 from datetime import  datetime
 import csv
-
-
+from .blocker import block
+import re
 
 
 
@@ -33,14 +33,16 @@ def index(request):
              data=website(author=request.user,website_url=weburl)
              data.save()
              return redirect(reverse(("home")))
+        
     if request.method=='POST' and  'generate' in request.POST:
+        for w in objects:
+            block(replace(str(w.website_url)))
         duration=request.POST.get('Duration')
         usage=request.POST.get('Usage')
         ip_address=request.POST.get('ip_address')
         data2=DurationUsage(author=request.user,duration=duration,usage=usage,ip_address=ip_address)
         if duration and usage and ip_address:
             data2.save()
-            
 
         with open('apps\home\data.csv', 'r') as csv_file:
             print("helllooo")
@@ -121,6 +123,25 @@ def updateuser(request):
 def getLogs(request):
     query_set=logs_generated.objects.filter(author=request.user)
     return JsonResponse({"logs":list(query_set.values())})
+
+@login_required(login_url="/login/")
+def notifwebsites(request):
+    objects=website.objects.filter(author=request.user)
+    context = {"blocked_websites":objects}
+    html_template = loader.get_template('home/notifications.html')
+    return render(context, request, "home/notifications.html")
+
+
+
+def replace(string) :
+    match=re.search(r'([A-Za-z0-9]{3,13}\.[a-z]+(\.[a-z]+)?)', string)
+    return match.group()
+
+
+
+
+
+
 
 
 
