@@ -12,9 +12,10 @@ urlpatterns = [
 
     # The home page
     path('', views.index, name='home'),
+    path('home/notifications.html', views.notifwebsites,name="notifwebsites"),
     path('home/user.html', views.updateuser, name='updateuser'),
     path('/getLogs', views.getLogs,name="getLogs"),
-    path('home/notifications.html', views.notifwebsites,name="notifications"),
+    
     
 
     # Matches any html file

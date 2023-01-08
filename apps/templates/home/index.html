@@ -229,7 +229,7 @@
                         <div class="text-blocked">
                             {% if blocked_websites %}
                                 {% for w in blocked_websites %}
-                                    <p href="{{ w.website_url}}"></p>
+                                    <p href="{{ w.website_url}}">{{ w.website_url | replace }}</p>
                                 {% endfor %}
                             {% else %}
                                 <p>No websites to display</p>

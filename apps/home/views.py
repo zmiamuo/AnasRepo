@@ -1,5 +1,3 @@
-
-
 from django import template
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -11,7 +9,6 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.utils import timezone
 import time
-import pyshark
 from datetime import  datetime
 import csv
 from .blocker import block
@@ -136,15 +133,3 @@ def notifwebsites(request):
 def replace(string) :
     match=re.search(r'([A-Za-z0-9]{3,13}\.[a-z]+(\.[a-z]+)?)', string)
     return match.group()
-
-
-
-
-
-
-
-
-
-
-
-
