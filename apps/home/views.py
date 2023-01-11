@@ -15,7 +15,6 @@ from .blocker import block
 import re
 import json
 import urllib.request
-from django.views.decorators.csrf import csrf_exempt
 
 external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
 
@@ -24,7 +23,6 @@ print(external_ip)
 
 
 @login_required(login_url="/login/")
-@csrf_exempt
 def index(request):
     
     objects=website.objects.filter(author=request.user)
@@ -40,8 +38,8 @@ def index(request):
              return redirect(reverse(("home")))
         
     if request.method=='POST' and  'generate' in request.POST:
-        # for w in objects:
-        #     block(replace(str(w.website_url)))
+        for w in objects:
+            block(replace(str(w.website_url)))
         duration=request.POST.get('Duration')
         usage=request.POST.get('Usage')
         ip_address=request.POST.get('ip_address')
