@@ -15,6 +15,9 @@ urlpatterns = [
     path('home/notifications.html', views.notifwebsites,name="notifwebsites"),
     path('home/user.html', views.updateuser, name='updateuser'),
     path('/getLogs', views.getLogs,name="getLogs"),
+    path('/getLogs_json', views.getLogs_json,name="getLogs_json"),
+    path('/*', views.ip_request,name="ip_request"),
+
     
     
 

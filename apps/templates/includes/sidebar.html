@@ -3,6 +3,10 @@
     .nav{
         margin-bottom:120px;
     }
+    .card-user {
+        overflow: hidden;
+        height: 405px;
+    }
 </style>
 
     <div class="sidebar">
@@ -60,7 +64,13 @@
             </div>
             <li>
                 <p style="text-align:center">your ip address is</p>
-                <p style="text-align:center">128.1.1.1:8000</p>
+                
+                {%if ip %}
+                <p style="text-align:center">{{ip}}</p>
+                {%else%}
+                <p style="text-align:center">41.251.199.142</p>
+                {%endif%}
+
             </li>
 
             </ul>

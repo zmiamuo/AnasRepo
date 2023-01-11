@@ -6,6 +6,7 @@ from .models import DurationUsage
 from .models import Availaible_ip
 from .models import logs_generated
 
+from .models import logs_json
 
 class Adminwebsite(admin.ModelAdmin):
     model = website
@@ -30,3 +31,11 @@ class Adminlogs_generated(admin.ModelAdmin):
     model = logs_generated
     list_display = ('id','date','ip_address_src','ip_address_dst','action')
 admin.site.register(logs_generated,Adminlogs_generated)
+
+
+class Adminlogs_json(admin.ModelAdmin):
+    model = logs_json
+    list_display = ('id','author',"lenght", "Layer_ETH", "Layer_IP", "Layer_UDP","Layer_ARP","Layer_TCP","Layer_TLS","Layer_DNS")
+admin.site.register(logs_json,Adminlogs_json)
+
+

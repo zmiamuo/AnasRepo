@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
-from .models import website,DurationUsage,Availaible_ip,logs_generated
+from .models import website,DurationUsage,Availaible_ip,logs_generated,logs_json
 from django.shortcuts import redirect , render 
 from django.contrib.auth.models import User
 from django.http import JsonResponse
@@ -13,10 +13,18 @@ from datetime import  datetime
 import csv
 from .blocker import block
 import re
+import json
+import urllib.request
+from django.views.decorators.csrf import csrf_exempt
+
+external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
+
+print(external_ip)
 
 
 
 @login_required(login_url="/login/")
+@csrf_exempt
 def index(request):
     
     objects=website.objects.filter(author=request.user)
@@ -32,8 +40,8 @@ def index(request):
              return redirect(reverse(("home")))
         
     if request.method=='POST' and  'generate' in request.POST:
-        for w in objects:
-            block(replace(str(w.website_url)))
+        # for w in objects:
+        #     block(replace(str(w.website_url)))
         duration=request.POST.get('Duration')
         usage=request.POST.get('Usage')
         ip_address=request.POST.get('ip_address')
@@ -55,8 +63,54 @@ def index(request):
                 action=row[3]
                 logs=logs_generated(author=request.user,date=date,ip_address_src=ip_src,ip_address_dst=ip_dst,action=action)
                 logs.save()
+                time.sleep(1)
                 print(logs)
+
+        with open("apps\home\logs.json","r") as f:
+            json_object = json.load(f)
+        for i in json_object["packet"]:
+            lenght=i["lenght"]
+            Layer_ETH=""
+            Layer_IP=""
+            Layer_UDP=""
+            Layer_ARP=""
+            Layer_TCP=""
+            Layer_TLS=""
+            Layer_DNS=""
+            try:
+                Layer_ETH=i["Layer ETH"]
+            except:
+                pass
+            try:
+                Layer_IP=i["Layer IP"]
+            except:
+                pass
+            try:
+                Layer_UDP=i["Layer UDP"]
+            except:
+                pass
+            try:
+                Layer_ARP=i["Layer ARP"]
+            except:
+                pass
+            try:
+                Layer_TCP=i["Layer TCP"]
+            except:
+                pass
+            try:
+                Layer_TLS=i["Layer TLS"]
+            except:
+                pass
+            try:
+                Layer_DNS=i["Layer DNS"]
+            except:
+                pass
             
+                
+
+            json_logs=logs_json(author=request.user,lenght=lenght,Layer_ETH=Layer_ETH,Layer_IP=Layer_IP,Layer_UDP=Layer_UDP,Layer_ARP=Layer_ARP,Layer_TCP=Layer_TCP,Layer_TLS=Layer_TLS,Layer_DNS=Layer_DNS)
+            json_logs.save()
+            time.sleep(2)  
 
 
         
@@ -69,9 +123,9 @@ def index(request):
 
 
 
+    external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
 
-
-    context = {'segment': 'index',"blocked_websites":objects,"generated_proxy":objects2,"available_ips":objects3,"generate_logs":generate_logs}
+    context = {'segment': 'index',"blocked_websites":objects,"generated_proxy":objects2,"available_ips":objects3,"generate_logs":generate_logs,"ip":external_ip}
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
 
@@ -122,6 +176,12 @@ def getLogs(request):
     return JsonResponse({"logs":list(query_set.values())})
 
 @login_required(login_url="/login/")
+def getLogs_json(request):
+    query_set=logs_json.objects.filter(author=request.user)
+    return JsonResponse({"logs_json":list(query_set.values())})
+
+
+@login_required(login_url="/login/")
 def notifwebsites(request):
     objects=website.objects.filter(author=request.user)
     context = {"blocked_websites":objects}
@@ -133,3 +193,9 @@ def notifwebsites(request):
 def replace(string) :
     match=re.search(r'([A-Za-z0-9]{3,13}\.[a-z]+(\.[a-z]+)?)', string)
     return match.group()
+
+@login_required(login_url="/login/")
+def ip_request(request):
+    external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
+    context={"ip":external_ip}
+    return render( request,"includes/sidebar.html",context)

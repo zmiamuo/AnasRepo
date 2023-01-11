@@ -40,5 +40,17 @@ class logs_generated(models.Model):
 
     action=models.CharField(max_length=255)
 
+class logs_json(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    lenght=models.CharField(max_length=255)
+    Layer_ETH=models.TextField()
+    Layer_IP=models.TextField()
+    Layer_UDP=models.TextField()
+    Layer_ARP=models.TextField()
+    Layer_TCP=models.TextField()
+    Layer_TLS=models.TextField()
+    Layer_DNS=models.TextField()
+
+
 
     

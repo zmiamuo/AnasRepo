@@ -8,77 +8,30 @@
 {% block content %}
 
 <style>
-.table-responsive{
-  height:100%;
-  overflow: scroll;
-}
 
-.time,.username {
-  text-align:left;   
-}
-.username {
-  padding-left:80px !important;
-}
-.text-right{
-  text-align:left;
-}
-th{
-  text-align:center;
-}
-.le{
-
-}
-.ip-add,.username{
-  text-align:left !important;
-
-}
-td{
-  text-align:center;
-}
-.time {
-  margin-let:20px !important;
-}
-.left_th{
-  text-align:left;
-  margin-left:30px;
-}
-.left_ap{
-  text-align:center;
-  padding-right: 100px !important;
-}
+  
 </style>
   <div class="content">
     <div class="row">
       <div class="col-md-12">
         <div class="card ">
           <div class="card-header">
-            <h4 class="card-title"> Simple Table</h4>
+            <h4 class="card-title">LOGS_GENERATOR</h4>
+            
+            <p id="anas"></p>
+           
           </div>
           <div class="card-body">
             
-            </table>
-            <div class="table-responsive">
-                <table class="table tablesorter " id="">
-                  <thead>
-                    <tr>
-                      <th scope="col">date</th>
-                      <th scope="col">username</th>
-                      <th scope="col">ip_source</th> 
-                      <th scope="col">ip_destination</th> 
-                      <th scope="col">protocol</th>
-                      
-                    </tr>
-                  </thead>
                 
-                    
-                    <tbody id="display">
-                    
-                    
-
-                   
-                    </tbody>
-                </table>
+                
+            <div id="target">
             </div>
+
+           
+          </div>
+            
+            
         </div>
         </div>
       </div>
@@ -93,29 +46,130 @@ td{
 <script>
 $(document).ready(function(){
 
-  setInterval(function(){
-      $.ajax({
-          type:'GET',
-          url:"{% url 'getLogs' %}",
-          success:function(response){
-              $("#display").empty();
-              for (var key in response.logs)
-              {
-                  console.log(response.logs[key].author);
-                  var temp="<tr><th scope='row'>"+response.logs[key].date+"</th><td>"+response.logs[key].username+"</td><td>"+response.logs[key].ip_address+"</td><td>"+response.logs[key].action+"</td></tr>";
-                  $("#display").append(temp);
-              }
+  setInterval(function() {
 
-
-          },
-          error:function(response){
-              alert("NO DATA FOUND");
-          }
-      
-      });
+    $.ajax({
+        type:'GET',
+        url:"{% url 'getLogs_json' %}",
+       
+        success:function(response){
           
-      },1000);
-  
+         
+            for (var key in response.logs_json)
+            {
+                console.log(response.logs_json[key].author);
+                if (response.logs_json[key].lenght){
+
+                  var lenght=response.logs_json[key].lenght
+
+                }
+                else{
+                  lenght="nothing to display"
+                }
+
+
+
+                if (response.logs_json[key].Layer_ETH){
+
+                  var Layer_ETH=response.logs_json[key].Layer_ETH
+
+                }
+                else{
+                  Layer_ETH="Layer_ETH:nothing to display"
+                }
+
+
+
+                if (response.logs_json[key].Layer_IP){
+
+                  var Layer_IP=response.logs_json[key].Layer_IP
+
+                }
+                else{
+                  lenght="nothing to display"
+                }
+                if (response.logs_json[key].Layer_UDP){
+
+                  var Layer_UDP=response.logs_json[key].Layer_UDP
+
+                }
+                else{
+                  lenght="nothing to display"
+                }
+                if (response.logs_json[key].Layer_ARP){
+
+                  var Layer_ARP=response.logs_json[key].Layer_ARP
+
+                }
+                else{
+                  Layer_ARP="nothing to display"
+                }
+
+                if (response.logs_json[key].Layer_ARP){
+
+                  var Layer_ARP=response.logs_json[key].Layer_ARP
+
+                }
+                else{
+                  Layer_ARP="nothing to display"
+                }
+                if (response.logs_json[key].Layer_TLS){
+
+                  var Layer_TLS=response.logs_json[key].Layer_TLS
+
+                }
+                else{
+                  Layer_TLS="nothing to display"
+                }
+                if (response.logs_json[key].Layer_DNS){
+
+                  var Layer_DNS=response.logs_json[key].Layer_DNS
+
+                }
+                else{
+                  Layer_DNS="nothing to display"
+                }
+                if (response.logs_json[key].Layer_TCP){
+
+                  var Layer_TCP=response.logs_json[key].Layer_TCP
+
+                }
+                else{
+                  Layer_TCP="nothing to display"
+                }
+
+
+
+               
+                var temp="<div style='background-color:#171531;margin-bottom:30px;padding:30px;border-radius:30px'><span style='font-size:20px'>length:</span><p>"+lenght+"</p><span style='font-size:20px'>Layer_ETH:</span><p>"+Layer_ETH+"</p><span style='font-size:20px'>Layer_IP:</span><p>"+Layer_IP+"</p><span style='font-size:20px'>Layer_UDP:</span><p>"+Layer_UDP+"</p><span style='font-size:20px'>Layer_TCP:</span><p>"+Layer_TCP+"</p><span style='font-size:20px'>Layer_ARP:</span><p>"+Layer_ARP+"</p><span style='font-size:20px'>Layer_TLS</span><p>"+Layer_TLS+"</p><span style='font-size:20px'>Layer_DNS:</span><p>"+Layer_DNS+"</p></div>"
+                $("#target").append(temp)
+                
+                
+
+
+            }
+               
+            var temp="<div style='background-color:#171531;margin-bottom:30px;padding:30px;border-radius:30px'><span style='font-size:20px'>length:</span><p>"+lenght+"</p><span style='font-size:20px'>Layer_ETH:</span><p>"+Layer_ETH+"</p><span style='font-size:20px'>Layer_IP:</span><p>"+Layer_IP+"</p><span style='font-size:20px'>Layer_UDP:</span><p>"+Layer_UDP+"</p><span style='font-size:20px'>Layer_TCP:</span><p>"+Layer_TCP+"</p><span style='font-size:20px'>Layer_ARP:</span><p>"+Layer_ARP+"</p><span style='font-size:20px'>Layer_TLS</span><p>"+Layer_TLS+"</p><span style='font-size:20px'>Layer_DNS:</span><p>"+Layer_DNS+"</p></div>"
+            $("#target").append(temp)
+           
+            
+            
+
+
+
+          
+
+        },
+            error:function(response){
+            alert("NO DATA FOUND");
+          }
+            
+        });
+            
+        },4000);
+    
 });
+    
+
 </script>
 {% endblock javascripts %}
